@@ -15,12 +15,16 @@ app.use(bodyParser.json())
 
 //mongoose
 mongoose.connect('mongodb://localhost/firegroup')
+
+
+if (process.env.NODE_ENV === 'production') {
+    // Static folder
+    app.use(express.static(__dirname + '/public/'));
+  
+    // Handle SPA
+    app.get(/.*/, (req, res) => res.sendFile(__dirname + '/public/index.html'));
+}
 app.use('/api/user', routeUser)
-
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
